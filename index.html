@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Site</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+      integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+      integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+  </head>
+
+<body>
+  <div class="container">
+    <div class="text-center">
+
+      <input type="file" id="imageInput" accept="image/*" onchange="classifyImage()" class="mt-5 p-3 border-rounded">
+    </div>
+    <img id="selectedImage" width="300" style="display: none;" alt="">
+
+    <h2 class="text-center">Result:</h2>
+    <p class="text-center" id="result"></p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.16.0/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.1/dist/mobilenet.min.js"></script>
+<script>
+  async function classifyImage() {
+    const imageInput = document.getElementById('imageInput');
+    const selectedImage = document.getElementById('selectedImage');
+    const resultElement = document.getElementById('result');
+
+    // Load MobileNet model
+    const model = await mobilenet.load();
+
+    const img = new Image();
+    img.src = URL.createObjectURL(imageInput.files[0]);
+
+    img.onload = async () => {
+      selectedImage.src = img.src;
+      selectedImage.style.display = 'block';
+
+      const predictions = await model.classify(img);
+      console.log('Predictions: ', predictions);
+      resultElement.textContent = `Predictions: ${predictions[0].className}`;
+    }
+  }
+</script>
+</body>
+
+</html>
