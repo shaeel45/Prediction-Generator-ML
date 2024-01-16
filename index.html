@@ -13,17 +13,42 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
       integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
   </head>
+  <style>
+
+    body{
+      background: rgb(2,0,36);
+background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 15%, rgba(3,134,203,1) 75%, rgba(0,212,255,1) 100%);
+    }
+    .input{
+      background-color: rgb(13, 99, 170);
+      border-color: black;
+      border-radius: 15px;
+    }
+
+    .text-white{
+      font-family:  'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      font-size: 2.5rem;
+    }
+
+    #selectedImage {
+    margin: auto;
+    display: block;
+  }
+  </style>
 
 <body>
   <div class="container">
     <div class="text-center">
-
-      <input type="file" id="imageInput" accept="image/*" onchange="classifyImage()" class="mt-5 p-3 border-rounded">
+      <h2 class="mt-4 text-white">Prediction Generator</h2>
+      <input type="file" id="imageInput" accept="image/*" onchange="classifyImage()" class="mt-5 p-3 input">
     </div>
-    <img id="selectedImage" width="300" style="display: none;" alt="">
+    <div class="text-center">
 
-    <h2 class="text-center">Result:</h2>
-    <p class="text-center" id="result"></p>
+      <img id="selectedImage" width="300" style="display: none; justify-content: center;" alt="">
+    </div>
+    <h2 class="text-center text-white" style="font-size: large; margin-top: 40px;">Predictions Result:</h2>
+
+    <p class="text-center text-white" style="font-size: medium;" id="result"></p>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.16.0/dist/tf.min.js"></script>
@@ -46,7 +71,9 @@
 
       const predictions = await model.classify(img);
       console.log('Predictions: ', predictions);
-      resultElement.textContent = `Predictions: ${predictions[0].className}`;
+      const className=predictions.map(predictions=>predictions.className);
+      const resultText= className.join(', ')
+      resultElement.textContent = resultText;
     }
   }
 </script>
